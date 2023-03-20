@@ -4,6 +4,12 @@ include('entete.php');
 if (isset($_GET['success'])) {
     echo '<div class="alert alert-success" role="alert"> L\'espèce a bien été ajoutée ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 }
+if (isset($_GET['erreur'])) {
+    echo '<div class="alert alert-danger" role="alert"> Le fichier est trop volumineux ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+}
+if (isset($_GET['erreur2'])) {
+    echo '<div class="alert alert-danger" role="alert"> Le fichier n\'est pas une image ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+}
 
 ?>
 
@@ -62,16 +68,36 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
 
     if (in_array($extensionImage, $extensions)) {
         $chemin = 'images/' . $nomImage;
-        move_uploaded_file($cheminImage, $chemin);
+        $nomImage = $nom . $extensionImage;
+        // on enregistre l'image au chemin voulu
+        try {
+            move_uploaded_file($image['tmp_name'], $cheminImage);
+        } catch (Exception $e) {
+            header('Location: ajouter_especes.php?erreur');
+        }
 
-        $sql = "INSERT INTO espece (nom_espece, description_espece, chemin_photo_espece) VALUES (:nom, :description, :chemin)";
-        $req = $bdd->prepare($sql);
-        $req->execute(array(
-            'nom' => $nom,
-            'description' => $description,
-            'chemin' => $chemin
-        ));
+
+        // on enregistre l'espèce dans la bdd
+        try {
+            $sql = "INSERT INTO `espece`(`id_espece`, `nom_espece`, `description_espece`, `chemin_photo_espece`) VALUES (NULL, :nom, :descri, :chemin)";
+            $req = $bdd->prepare($sql);
+
+            $req->bindParam(':nom', $nom);
+            $req->bindParam(':descri', $description);
+            $req->bindParam(':chemin', $cheminImage);
+
+            $req->execute();
+        } catch (PDOException $e) {
+            echo
+            '<div class="alert alert-success" role="alert"> erreur d\'enregistrement dans la bdd <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+        }
+
+
+
+
 
         header('Location: ajouter_especes.php?success');
+    } else {
+        header('Location: ajouter_especes.php?erreur2');
     }
 }

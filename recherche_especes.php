@@ -6,6 +6,17 @@ include('entete.php');
 
 <div class="container">
 
+  <div class="input-group">
+    <div class="form-outline">
+      <input type="search" id="form1" class="form-control" />
+      <label class="form-label" for="form1">Rechercher</label>
+    </div>
+    <button type="button" class="btn btn-primary">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+
+
   <?php
 
   $host = 'localhost';
@@ -14,7 +25,6 @@ include('entete.php');
 
   try {
     $bdd = new PDO("mysql:host=$host;dbname=pokedex", $login, $password);
-    echo '<div class="alert alert-success" role="alert"> Connexion à la base de données réussie !</div>';
   } catch (Exception $e) {
     echo '<div class="alert alert-danger" role="alert"> Erreur de connexion à la base de données !</div>';
   }
