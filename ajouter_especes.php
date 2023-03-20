@@ -68,12 +68,9 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
 
 
     if (in_array($extensionImage, $extensions)) {
-        $chemin = 'images/' . $nom;
-        $nomImage = $nom . $extensionImage;
-        // on enregistre l'image au chemin voulu
-        try {
+        if ($image['size'] <= 1000000) {
             move_uploaded_file($image['tmp_name'], $cheminImage);
-        } catch (Exception $e) {
+        } else {
             header('Location: ajouter_especes.php?erreur');
         }
 
