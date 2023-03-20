@@ -66,8 +66,9 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
     $extensions = ['.png', '.jpg', '.jpeg'];
     $extensionImage = strrchr($nomImage, '.');
 
+
     if (in_array($extensionImage, $extensions)) {
-        $chemin = 'images/' . $nomImage;
+        $chemin = 'images/' . $nom;
         $nomImage = $nom . $extensionImage;
         // on enregistre l'image au chemin voulu
         try {

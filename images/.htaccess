@@ -1,2 +1,3 @@
 Options -Indexes
 deny from all
+file_uploads = On
