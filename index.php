@@ -1,6 +1,13 @@
 <?php
 include('entete.php');
-echo '<div class="alert alert-success" role="alert"> Vous êtes connecté ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+
+if (empty($_SESSION['login']) || empty($_SESSION['password'])) {
+    // si inexistante ou nulle, on redirige vers le formulaire de login
+    header('Location: login.php');
+    exit();
+} else {
+    echo '<div class="alert alert-success" role="alert"> Vous êtes connecté ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+}
 
 ?>
 

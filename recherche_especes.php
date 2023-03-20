@@ -6,69 +6,53 @@ include('entete.php');
 
 <div class="container">
 
-    <?php
-    /*
-    $password = "admin";
-    $login = "admin";
-    $host = "localhost";
-    $bdd = "pokedex";
-    $table = "especes";
+  <?php
 
-    try {
-        $bdd = new PDO('mysql:host=' . $host . ';dbname=' . $bdd . ';charset=utf8', $login, $password);
-    } catch (Exception $e) {
-        die('Erreur : ' . $e->getMessage());
-    }
+  $host = 'localhost';
+  $login = 'pokedex';
+  $password = 'password';
 
-    $sql = "SELECT nom, description, chemin_image FROM especes";
-    $req = $bdd->prepare($sql);
-    $req->execute();
-    $resultats = $req->fetchAll();
-*/
-    // Affichage des résultats
-
-    $resultats = array(
-        array(
-            'nom' => 'Pikachu',
-            'description' => 'Pikachu est une espèce de Pokémon de type Électrik de la franchise Pokémon.',
-            'chemin_image' => 'https://cdn.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png'
-        ),
-        array(
-            'nom' => 'Bulbizarre',
-            'description' => 'Bulbizarre est une espèce de Pokémon de type Plante et Poison de la franchise Pokémon.',
-            'chemin_image' => 'https://cdn.bulbagarden.net/upload/2/21/Spr_5b_001.png'
-        ),
-        array(
-            'nom' => 'ACTINIA FRAGACEA',
-            'description' => 'ACTINIA FRAGACEA est une espèce de Pokémon de type Plante et Poison de la franchise Pokémon.',
-            'chemin_image' => 'images/ACTINIA_FRAGACEA.png'
-        )
-    );
-    ?>
+  try {
+    $bdd = new PDO("mysql:host=$host;dbname=pokedex", $login, $password);
+    echo '<div class="alert alert-success" role="alert"> Connexion à la base de données réussie !</div>';
+  } catch (Exception $e) {
+    echo '<div class="alert alert-danger" role="alert"> Erreur de connexion à la base de données !</div>';
+  }
 
 
-    <div class="container-fluid">
-        <div class="row">
+  $sql = "SELECT nom_espece, description_espece, chemin_photo_espece FROM espece";
+  $req = $bdd->prepare($sql);
+  $req->execute();
+  $resultats = $req->fetchAll();
 
-            <?php
-            foreach ($resultats as $resultat) {
-                echo '
+
+  ?>
+
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <?php
+      foreach ($resultats as $resultat) {
+        $image = file_get_contents($resultat['chemin_photo_espece']);
+
+        echo '
       <div class="col-lg-4 col-md-6 col-sm-12">
         <div class="card mb-4">
-          <img src="' . $resultat['chemin_image'] . '" class="card-img-top" alt="' . $resultat['nom'] . '">
+            <img src="data:image/png;base64,' . base64_encode($image) . '" class="card-img-top" alt="' . $resultat['nom_espece'] . '">
           <div class="card-body">
-            <h2 class="card-title">' . $resultat['nom'] . '</h2>
-            <p class="card-text">' . $resultat['description'] . '</p>
+            <h2 class="card-title">' . $resultat['nom_espece'] . '</h2>
+            <p class="card-text">' . $resultat['description_espece'] . '</p>
             <a href="#" class="btn btn-primary">Afficher plus</a>
           </div>
         </div>
       </div>
       ';
-            }
-            ?>
+      }
+      ?>
 
-        </div>
     </div>
+  </div>
 
 
 </div>

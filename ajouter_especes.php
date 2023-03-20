@@ -1,10 +1,15 @@
 <?php
 include('entete.php');
+// on regarde si le header contient success
+if (isset($_GET['success'])) {
+    echo '<div class="alert alert-success" role="alert"> L\'espèce a bien été ajoutée ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+}
+
 ?>
 
 <div class="container">
     <h1 class="text-center">Ajouter une espèce</h1>
-    <form action="ajout_espece.php" method="post" enctype="multipart/form-data">
+    <form action="ajouter_especes.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="nom" class="form-label">Nom</label>
             <input type="text" class="form-control" id="nom" name="nom" required>
@@ -32,5 +37,41 @@ include('entete.php');
 </div>
 
 <?php
-include('pied.php');
-?>
+$host = 'localhost';
+$login = 'pokedex';
+$password = 'password';
+
+try {
+    $bdd = new PDO("mysql:host=$host;dbname=pokedex", $login, $password);
+} catch (PDOException $e) {
+    echo
+    '<div class="alert alert-success" role="alert"> pas de connection a la bdd <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+}
+
+if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image'])) {
+    $nom = $_POST['nom'];
+    $description = $_POST['description'];
+    $image = $_FILES['image'];
+
+    $nomImage = $image['name'];
+    $cheminImage = 'images/' . $nomImage;
+
+
+    $extensions = ['.png', '.jpg', '.jpeg'];
+    $extensionImage = strrchr($nomImage, '.');
+
+    if (in_array($extensionImage, $extensions)) {
+        $chemin = 'images/' . $nomImage;
+        move_uploaded_file($cheminImage, $chemin);
+
+        $sql = "INSERT INTO espece (nom_espece, description_espece, chemin_photo_espece) VALUES (:nom, :description, :chemin)";
+        $req = $bdd->prepare($sql);
+        $req->execute(array(
+            'nom' => $nom,
+            'description' => $description,
+            'chemin' => $chemin
+        ));
+
+        header('Location: ajouter_especes.php?success');
+    }
+}
