@@ -1,5 +1,15 @@
 <?php
 include('entete.php');
+
+//on regarde si l'utilisateur est admin
+if ($_SESSION['login'] != 'admin') {
+    header('Location: index.php');
+    exit();
+}
+
+
+
+
 // on regarde si le header contient success
 if (isset($_GET['success'])) {
     echo '<div class="alert alert-success" role="alert"> L\'espèce a bien été ajoutée ! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
@@ -34,6 +44,9 @@ if (isset($_GET['erreur2'])) {
             }
             if (isset($_GET['erreur2'])) {
                 echo '<div class="alert alert-danger" role="alert"> Le fichier n\'est pas une image !</div>';
+            }
+            if (isset($_GET['erreur3'])) {
+                echo '<div class="alert alert-danger" role="alert"> L\'image n\'a pas été uploadée !</div>';
             }
             ?>
 
@@ -91,10 +104,9 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
         'Û' => 'U',
         'Ç' => 'C',
     );
-    $nomImage = strtr($nomImage, $dict_car_remp);
-    $nomImage = strtolower($nomImage);
+    //$nomImage = strtr($nomImage, $dict_car_remp);
+    //$nomImage = strtolower($nomImage);
     $cheminImage = 'images/' . $nomImage;
-
 
 
 
@@ -102,6 +114,13 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
     if (in_array($extensionImage, $extensions)) {
         if ($image['size'] <= 1000000) {
             move_uploaded_file($image['tmp_name'], $cheminImage);
+            // on verrifie si l'image a bien été upload
+            if (file_exists($cheminImage)) {
+                echo '<div class="alert alert-success" role="alert"> L\'image a bien été uploadée ! <button
+                 type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            } else {
+                header('Location: ajouter_especes.php?erreur3');
+            }
         } else {
             header('Location: ajouter_especes.php?erreur');
         }
@@ -112,6 +131,8 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
             $sql = "INSERT INTO `espece`(`id_espece`, `nom_espece`, `description_espece`, `chemin_photo_espece`) VALUES (NULL, :nom, :descri, :chemin)";
             $req = $bdd->prepare($sql);
 
+            echo '<div class="alert alert-success" role="alert"> requete : ' . $sql . ' <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+
             $req->bindParam(':nom', $nom);
             $req->bindParam(':descri', $description);
             $req->bindParam(':chemin', $cheminImage);
@@ -121,9 +142,6 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
             echo
             '<div class="alert alert-success" role="alert"> erreur d\'enregistrement dans la bdd <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
         }
-
-
-
 
 
         header('Location: ajouter_especes.php?success');

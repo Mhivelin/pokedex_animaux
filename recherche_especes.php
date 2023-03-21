@@ -1,17 +1,18 @@
 <?php
 include('entete.php');
 
-$host = 'localhost';
-$login = 'pokedex';
-$password = 'password';
+include('connexion_bdd.php');
 
-try {
-  $bdd = new PDO("mysql:host=$host;dbname=pokedex", $login, $password);
-} catch (Exception $e) {
-  echo '<div class="alert alert-danger" role="alert"> Erreur de connexion à la base de données !</div>';
-}
 
-// SELECT nom_espece, description_espece, chemin_photo_espece FROM espece WHERE nom_espece LIKE '%pikachu%';
+
+// spinner de chargement
+echo '<div class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>';
+
+
+
+
 
 if (isset($_GET['recherche'])) {
   $recherche = $_GET['recherche'];
@@ -21,18 +22,6 @@ if (isset($_GET['recherche'])) {
   $sql = "SELECT nom_espece, description_espece, chemin_photo_espece FROM espece";
   $resultats = $bdd->query($sql);
 }
-
-echo '<div class= alert alert-success role=alert> requete : ' . $sql . '</div>';
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -45,27 +34,27 @@ echo '<div class= alert alert-success role=alert> requete : ' . $sql . '</div>';
 
 <div class="container">
 
-  <div class="row">
-    <div class="col-lg-12">
-      <form action="recherche_especes.php" method="GET">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Rechercher une espèce" name="recherche">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
-          </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form action="recherche_especes.php" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Rechercher une espèce" name="recherche">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
 
 
 
 
 
 
-    <div class="container-fluid">
-      <div class="row">
+        <div class="container-fluid">
+            <div class="row">
 
-        <?php
+                <?php
         foreach ($resultats as $resultat) {
           $image = file_get_contents($resultat['chemin_photo_espece']);
 
@@ -84,12 +73,14 @@ echo '<div class= alert alert-success role=alert> requete : ' . $sql . '</div>';
         }
         ?>
 
-      </div>
+            </div>
+        </div>
+
+
     </div>
 
-
-  </div>
-
-  <?php
+    <?php
   include('pied.php');
+
+
   ?>

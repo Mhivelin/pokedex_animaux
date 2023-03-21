@@ -1,16 +1,7 @@
     <?php
 
-    $host = 'localhost';
-    $login = 'pokedex';
-    $password = 'password';
+    include('connexion_bdd.php');
 
-    // on se connecte à MySQL
-    try {
-        $bdd = new PDO("mysql:host=$host;dbname=pokedex", $login, $password);
-        echo '<div class="alert alert-success" role="alert"> Connexion à la base de données réussie !</div>';
-    } catch (Exception $e) {
-        echo '<div class="alert alert-danger" role="alert"> Erreur de connexion à la base de données !</div>';
-    }
 
     // on teste si le visiteur a soumis le formulaire de connexion
     if (isset($_POST['login']) && isset($_POST['password'])) {
@@ -44,7 +35,9 @@
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>login</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+                crossorigin="anonymous">
         </head>
 
         <body>
@@ -69,6 +62,12 @@
                         </div>
                     </div>
                 </div>
+
+                <h2>Pas de compte ?</h2>
+                <a class="btn btn-primary" href="signup.php" role="button">S'inscrire</a>
+
+
+
             </div>
         </body>
 
