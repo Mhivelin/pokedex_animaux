@@ -59,12 +59,44 @@ if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image
     $description = $_POST['description'];
     $image = $_FILES['image'];
 
+    $extensions = ['.png', '.jpg', '.jpeg'];
+    $extensionImage = strrchr($image['name'], '.');
+
     $nomImage = $image['name'];
+    $dict_car_remp = array(
+        ' ' => '_',
+        '/' => '_',
+        'é' => 'e',
+        'è' => 'e',
+        'ê' => 'e',
+        'à' => 'a',
+        'â' => 'a',
+        'î' => 'i',
+        'ï' => 'i',
+        'ô' => 'o',
+        'ö' => 'o',
+        'ù' => 'u',
+        'û' => 'u',
+        'ç' => 'c',
+        'É' => 'E',
+        'È' => 'E',
+        'Ê' => 'E',
+        'À' => 'A',
+        'Â' => 'A',
+        'Î' => 'I',
+        'Ï' => 'I',
+        'Ô' => 'O',
+        'Ö' => 'O',
+        'Ù' => 'U',
+        'Û' => 'U',
+        'Ç' => 'C',
+    );
+    $nomImage = strtr($nomImage, $dict_car_remp);
+    $nomImage = strtolower($nomImage);
     $cheminImage = 'images/' . $nomImage;
 
 
-    $extensions = ['.png', '.jpg', '.jpeg'];
-    $extensionImage = strrchr($nomImage, '.');
+
 
 
     if (in_array($extensionImage, $extensions)) {
