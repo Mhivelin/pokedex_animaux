@@ -1,8 +1,6 @@
 <?php
 include('entete.php');
 
-
-
 include('connexion_bdd.php');
 
 //requete pour afficher les especes 5 derniers especes ajoutés par des utilisateurs

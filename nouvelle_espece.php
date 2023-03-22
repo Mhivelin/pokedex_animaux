@@ -44,6 +44,20 @@ if (isset($_POST['nom_espece'])) {
     <form method="POST" action="nouvelle_espece.php">
 
         <label for="nom" class="form-label">Nom de l'espèce à Ajouter</label>
+
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="espece_existante" checked onchange="<?php 
+                if (isset($_POST['espece_existante'])) {
+                    include('ajouter_espece.php');
+                 ?>">
+            <label class="form-check-label" for="espece_existante">l'espèce existe déjà</label>
+        </div>
+
+
+
+
+
+
         <select class="form-select" aria-label="Default select example" name="nom_espece">
             <option selected>choisir une espèce</option>
 
@@ -58,9 +72,18 @@ if (isset($_POST['nom_espece'])) {
             ?>
 
 
+
+
         </select>
 
         <button type="submit" class="btn btn-primary">Ajouter</button>
 
 
+
+    </form>
+
 </div>
+
+<?php
+include('pied.php');
+?>

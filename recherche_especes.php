@@ -79,8 +79,4 @@ if (isset($_GET['recherche'])) {
 
     </div>
 
-    <?php
-  include('pied.php');
-
-
-  ?>
+    <?php include('pied.php') ?>

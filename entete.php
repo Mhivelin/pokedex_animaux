@@ -37,28 +37,55 @@ if (empty($_SESSION['login']) || empty($_SESSION['password'])) {
             <li class="nav-item">
                 <a class="nav-link" href="recherche_especes.php">Rechercher une espèce</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="compte.php">Mon compte</a>
-            </li>
-            <?php
-            //afficher le nom de l'utilisateur
-            echo '<li class="nav-item">
-                <a class="nav-link" href="compte.php">' . $_SESSION['login'] . '</a>
-            </li>';
 
-
-            if ($_SESSION['login'] == 'admin') {
-                echo '<li class="nav-item">
-                <a class="nav-link" href="ajouter_especes.php">Ajouter une espèce</a>
-            </li>';
-            }
+            <?php //aligné à droite 
             ?>
 
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    mon compte
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="compte.php">Mon compte</a>
+                    </li>
+                    <?php
+                    //afficher le nom de l'utilisateur et son nombre d'espèces
+                    include('connexion_bdd.php');
+                    $sql = "SELECT COUNT(*) FROM espece JOIN avoir_espece ON espece.id_espece = avoir_espece.id_espece JOIN utilisateur ON avoir_espece.id_utilisateur = utilisateur.id_utilisateur WHERE utilisateur.nom_utilisateur = '" . $_SESSION['login'] . "'";
+                    $resultats = $bdd->query($sql);
+                    $resultat = $resultats->fetch();
 
-            <li class="nav-item ms-auto">
-                <button type="button" class="primary btn btn-primary"
-                    onclick="window.location.href='deconnexion.php'">Déconnexion</button>
-            </li>
+                    echo '<li class="nav-item">
+                <a class="nav-link" href="compte.php"> Mes espèces
+            
+                <span class="badge bg-secondary">' . $resultat['COUNT(*)'] . '</span>
+                </a>
+            </li>';
 
+                    if ($_SESSION['login'] == 'admin') {
+                        echo '<li class="nav-item">
+                <a class="nav-link" href="ajouter_especes.php">Ajouter une espèce</a>
+            </li>';
+                    }
+                    ?>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="deconnexion.php">Déconnexion</a>
+                    </li>
+                </ul>
+            </div>
         </ul>
     </div>
+
+
+
+
+    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+    </script>
+</body>
+</body>
+
+</html>

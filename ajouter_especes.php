@@ -1,11 +1,6 @@
 <?php
 include('entete.php');
 
-//on regarde si l'utilisateur est admin
-if ($_SESSION['login'] != 'admin') {
-    header('Location: index.php');
-    exit();
-}
 
 
 
