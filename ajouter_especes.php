@@ -32,35 +32,16 @@ if (isset($_GET['erreur2'])) {
         <div class="mb-3">
             <label for="image" class="form-label">Image</label>
             <input class="form-control" type="file" id="image" name="image" required>
-
-            <?php
-            if (isset($_GET['erreur'])) {
-                echo '<div class="alert alert-danger" role="alert"> Le fichier est trop volumineux !</div>';
-            }
-            if (isset($_GET['erreur2'])) {
-                echo '<div class="alert alert-danger" role="alert"> Le fichier n\'est pas une image !</div>';
-            }
-            if (isset($_GET['erreur3'])) {
-                echo '<div class="alert alert-danger" role="alert"> L\'image n\'a pas été uploadée !</div>';
-            }
-            ?>
-
         </div>
         <button type="submit" class="btn btn-primary">Ajouter</button>
     </form>
 </div>
 
 <?php
-$host = 'localhost';
-$login = 'pokedex';
-$password = 'password';
+include('connexion_bdd.php');
+include('pied.php');
 
-try {
-    $bdd = new PDO("mysql:host=$host;dbname=pokedex", $login, $password);
-} catch (PDOException $e) {
-    echo
-    '<div class="alert alert-success" role="alert"> pas de connection a la bdd <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-}
+
 
 if (isset($_POST['nom']) && isset($_POST['description']) && isset($_FILES['image'])) {
     $nom = $_POST['nom'];
